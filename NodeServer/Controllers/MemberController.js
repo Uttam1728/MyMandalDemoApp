@@ -37,11 +37,14 @@ router.get('/:id', (req, res) => {
 
 /*
 Sample Data
-        "memberName" : 'test member name',
+        "memberFirstName" : "test"
+        "memberMiddleName" : "middle"
+        "memberLastName" : "last"
         "memberImgSrc" : "/img",
         "memberEmail" : 'test@email.com',
         "memberMobileNumbers" : ["123456789","465789123"]
         "memberAddress" : "testAddress",
+        "withdrawal" : "50000"
         "createdDate"  : Date.now(),
         "createdBy"  : 13245, 
         "lastUpdatedDate"  : null,
@@ -53,11 +56,14 @@ Sample Data
 router.post('/', (req, res) => {
 
     var member = new Member({
-        memberName: req.body.memberName,
+        memberFirstName : req.body.memberFirstName,
+        memberMiddleName: req.body.memberMiddleName,
+        memberLastName: req.body.memberLastName,
         memberImgSrc: req.body.memberImgSrc,
         memberEmail: req.body.memberEmail,
         memberMobileNumbers: req.body.memberMobileNumbers,
         reasomemberAddress: req.body.memberAddress,
+        withdrawal : req.body.withdrawal,
         createdDate: Date.now(),
         createdBy: req.body.createdBy,
         lastUpdatedDate: null,
@@ -80,11 +86,12 @@ router.put('/:id', (req, res) => {
         res.status(400).send("In Valid Object Id");
     }
     var member = {
-        memberName: req.body.memberName,
-        memberImgSrc: req.body.memberImgSrc,
-        memberEmail: req.body.memberEmail,
+        memberFirstName : req.body.memberFirstName,
+        memberMiddleName: req.body.memberMiddleName,
+        memberLastName: req.body.memberLastName,
         memberMobileNumbers: req.body.memberMobileNumbers,
         reasomemberAddress: req.body.memberAddress,
+        withdrawal : req.body.withdrawal,
         lastUpdatedDate: Date.now(),
         lastUpdatedBy: req.body.createdBy,
     };

@@ -4,9 +4,19 @@ var autoIncrement = require('mongoose-auto-increment');
 const validator = require('validator'); 
 var MemberSchema = new mongoose.Schema({
 
-  memberName: {
+  memberFirstName: {
+    type: String,
+    required: [true, 'આપનું નામ દાખલ કરો'],
+    trim: true,
+  }, 
+  memberMiddleName: {
     type: String,
     required: [true, 'નામ દાખલ કરો'],
+    trim: true,
+  },
+  memberLastName: {
+    type: String,
+    required: [true, 'આપની અટક દાખલ કરો'],
     trim: true,
   },
   memberImgSrc: {
@@ -26,6 +36,10 @@ var MemberSchema = new mongoose.Schema({
   },
   memberAddress: {
     type: String,
+    trim: true,
+  },
+  withdrawal: {
+    type: Number,
     trim: true,
   },
   
