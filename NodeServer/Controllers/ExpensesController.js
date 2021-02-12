@@ -1,8 +1,6 @@
 const Expence = require("../Models/Expense");
 const express = require("express");
-const {
-  isValidObjectId
-} = require("mongoose");
+const { isValidObjectId } = require("mongoose");
 
 var router = express.Router();
 
@@ -22,12 +20,16 @@ router.get('/:id', (req, res) => {
   if (!isValidObjectId(req.params.id)) {
     res.status(400).send("In Valid Object Id");
   }
-
-  Expence.find(yreq.params.id, (err, docs) => {
+  // if ObjectId not passed than use findOneAndupdate(filter,options,(err,docs))
+  Expence.findById(req.params.id, (err, docs) => {
     if (!err) {
-      res.send(docs);
+      if (docs)
+        res.send(docs);
+      else
+        //send specific status code status - it is remaining
+        res.send('-1');
     } else {
-      console.log('Error retriving in data', JSON.stringify(err, undefined, 2));
+      res.send('Error retriving in data' + JSON.stringify(err, undefined, 2));
     }
   });
 });
@@ -44,6 +46,7 @@ Sample Data
 
 
 */
+
 router.post('/', (req, res) => {
 
   var expence = new Expence({
@@ -76,13 +79,17 @@ router.put('/:id', (req, res) => {
     lastUpdatedDate: Date.now(),
     lastUpdatedBy: req.body.createdBy,
   };
-
+  // if ObjectId not passed than use findOneAndupdate(filter,options,(err,docs))
   Expence.findByIdAndUpdate(req.params.id,
     expence,
     { new: true },
     (err, data) => {
       if (!err) {
-        res.send(data);
+        if (docs)
+          res.send(docs);
+        else
+          //send specific status code status - it is remaining
+          res.send('-1');
       } else {
         console.log('Error saving data', JSON.stringify(err, undefined, 2));
       }
@@ -93,10 +100,14 @@ router.delete('/:id', (req, res) => {
   if (!isValidObjectId(req.params.id)) {
     res.status(400).send("In Valid Object Id");
   }
-
+  // if ObjectId not passed than use findOneAndRemove(filter,(err),docs)
   Expence.findByIdAndDelete(req.params.id, (err, docs) => {
     if (!err) {
-      res.send(docs);
+      if (docs)
+        res.send(docs);
+      else
+        //send specific status code status - it is remaining
+        res.send('-1');
     } else {
       console.log('Error saving data', JSON.stringify(err, undefined, 2));
     }
