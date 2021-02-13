@@ -37,7 +37,7 @@ router.get('/:id', (req, res) => {
 
 
 /*
-Sample Data
+        Sample Data
         "memberID" : 9,
         "installment": 500,
         "oldWithdrawal": 15000,
@@ -48,23 +48,28 @@ Sample Data
         "isInstallmentGiven": false,
         "intrestOnOldWithdrawal": 250.30,
 
-
 */
 
 router.post('/', (req, res) => {
-    memberID = req.body.memberID;
-    installment= req.body.installment;
-    oldWithdrawal= req.body.oldWithdrawal;
-    depositWithdrawal= req.body.depositWithdrawal;
-    newWithdrawal= req.body.newWithdrawal;
-    isInterestgiven= req.body.isInterestgiven;
-    isInstallmentGiven= req.body.isInstallmentGiven;
-    intrestOnOldWithdrawal= req.body.intrestOnOldWithdrawal;
+    var memberID = req.body.memberID;
+    var installment = req.body.installment;
+    var oldWithdrawal = req.body.oldWithdrawal;
+    var depositWithdrawal = req.body.depositWithdrawal;
+    var newWithdrawal = req.body.newWithdrawal;
+    var isInterestgiven = req.body.isInterestgiven;
+    var isInstallmentGiven = req.body.isInstallmentGiven;
+    var intrestOnOldWithdrawal = req.body.intrestOnOldWithdrawal;
+    var totalWithdrawal = req.body.totalWithdrawal;
 
-    totalWithdrawal= oldWithdrawal - depositWithdrawal + newWithdrawal;
+    // ------------------- Business logic section Start ------------------- //
 
-    var installment = new Installment({
-        memberID : memberID,
+
+
+    // ------------------- Business logic section End --------------------- //
+
+
+    var installmentModel = new Installment({
+        memberID: memberID,
         installment: installment,
         oldWithdrawal: oldWithdrawal,
         depositWithdrawal: depositWithdrawal,
@@ -79,7 +84,7 @@ router.post('/', (req, res) => {
         lastUpdatedBy: null,
     });
 
-    installment.save((err, docs) => {
+    installmentModel.save((err, docs) => {
         if (!err) {
             //console.log(docs);
             return res.send(docs);
@@ -94,18 +99,25 @@ router.put('/:id', (req, res) => {
     if (!isValidObjectId(req.params.id)) {
         res.status(400).send("In Valid Object Id");
     }
-    memberID = req.body.memberID;
-    installment= req.body.installment;
-    oldWithdrawal= req.body.oldWithdrawal;
-    depositWithdrawal= req.body.depositWithdrawal;
-    newWithdrawal= req.body.newWithdrawal;
-    isInterestgiven= req.body.isInterestgiven;
-    isInstallmentGiven= req.body.isInstallmentGiven;
-    intrestOnOldWithdrawal= req.body.intrestOnOldWithdrawal;
+    var memberID = req.body.memberID;
+    var installment = req.body.installment;
+    var oldWithdrawal = req.body.oldWithdrawal;
+    var depositWithdrawal = req.body.depositWithdrawal;
+    var newWithdrawal = req.body.newWithdrawal;
+    var isInterestgiven = req.body.isInterestgiven;
+    var isInstallmentGiven = req.body.isInstallmentGiven;
+    var intrestOnOldWithdrawal = req.body.intrestOnOldWithdrawal;
+    var totalWithdrawal = req.body.totalWithdrawal;
 
-    totalWithdrawal= oldWithdrawal - depositWithdrawal + newWithdrawal;
-    var installment = {
-        memberID : memberID,
+    // ------------------- Business logic section Start ------------------- //
+
+
+
+    // ------------------- Business logic section End --------------------- //
+
+
+    var installmentModel = {
+        memberID: memberID,
         installment: installment,
         oldWithdrawal: oldWithdrawal,
         depositWithdrawal: depositWithdrawal,
@@ -119,7 +131,7 @@ router.put('/:id', (req, res) => {
     };
     // if ObjectId not passed than use findOneAndupdate(filter,options,(err,docs))
     Installment.findByIdAndUpdate(req.params.id,
-        installment,
+        installmentModel,
         { new: true },
         (err, docs) => {
             if (!err) {

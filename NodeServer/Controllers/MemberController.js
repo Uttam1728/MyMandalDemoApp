@@ -36,7 +36,7 @@ router.get('/:id', (req, res) => {
 
 
 /*
-Sample Data
+        Sample Data
         "memberFirstName" : "test"
         "memberMiddleName" : "middle"
         "memberLastName" : "last"
@@ -49,21 +49,34 @@ Sample Data
         "createdBy"  : 13245, 
         "lastUpdatedDate"  : null,
         "lastUpdatedBy"  : null,
-
-
 */
 
 router.post('/', (req, res) => {
+    var memberFirstName = req.body.memberFirstName;
+    var memberMiddleName = req.body.memberMiddleName;
+    var memberLastName = req.body.memberLastName;
+    var memberImgSrc = req.body.memberImgSrc;
+    var memberEmail = req.body.memberEmail;
+    var memberMobileNumbers = req.body.memberMobileNumbers;
+    var memberAddress = req.body.memberAddress;
+    var withdrawal = req.body.withdrawal;
+
+    // ------------------- Business logic section Start ------------------- //
+
+
+
+    // ------------------- Business logic section End --------------------- //
+
 
     var member = new Member({
-        memberFirstName : req.body.memberFirstName,
-        memberMiddleName: req.body.memberMiddleName,
-        memberLastName: req.body.memberLastName,
-        memberImgSrc: req.body.memberImgSrc,
-        memberEmail: req.body.memberEmail,
-        memberMobileNumbers: req.body.memberMobileNumbers,
-        reasomemberAddress: req.body.memberAddress,
-        withdrawal : req.body.withdrawal,
+        memberFirstName: memberFirstName,
+        memberMiddleName: memberMiddleName,
+        memberLastName: memberLastName,
+        memberImgSrc: memberImgSrc,
+        memberEmail: memberEmail,
+        memberMobileNumbers: memberMobileNumbers,
+        memberAddress: memberAddress,
+        withdrawal: withdrawal,
         createdDate: Date.now(),
         createdBy: req.body.createdBy,
         lastUpdatedDate: null,
@@ -85,13 +98,31 @@ router.put('/:id', (req, res) => {
     if (!isValidObjectId(req.params.id)) {
         res.status(400).send("In Valid Object Id");
     }
+    var memberFirstName = req.body.memberFirstName;
+    var memberMiddleName = req.body.memberMiddleName;
+    var memberLastName = req.body.memberLastName;
+    var memberImgSrc = req.body.memberImgSrc;
+    var memberEmail = req.body.memberEmail;
+    var memberMobileNumbers = req.body.memberMobileNumbers;
+    var memberAddress = req.body.memberAddress;
+    var withdrawal = req.body.withdrawal;
+
+    // ------------------- Business logic section Start ------------------- //
+
+
+
+    // ------------------- Business logic section End --------------------- //
+
+
     var member = {
-        memberFirstName : req.body.memberFirstName,
-        memberMiddleName: req.body.memberMiddleName,
-        memberLastName: req.body.memberLastName,
-        memberMobileNumbers: req.body.memberMobileNumbers,
-        reasomemberAddress: req.body.memberAddress,
-        withdrawal : req.body.withdrawal,
+        memberFirstName: memberFirstName,
+        memberMiddleName: memberMiddleName,
+        memberLastName: memberLastName,
+        memberMobileNumbers: memberMobileNumbers,
+        memberAddress: memberAddress,
+        withdrawal: withdrawal,
+        memberImgSrc: memberImgSrc,
+        memberEmail: memberEmail,
         lastUpdatedDate: Date.now(),
         lastUpdatedBy: req.body.createdBy,
     };
