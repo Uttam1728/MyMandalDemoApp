@@ -61,7 +61,7 @@ var InstallmentSchema = new mongoose.Schema({
 autoIncrement.initialize(mongoose.connection);
 InstallmentSchema.plugin(autoIncrement.plugin, {
     model: 'Installments',
-    field: 'InstallmentsID',
+    field: 'InstallmentID',
     startAt: 1,
     incrementBy: 1,
     unique: true,
@@ -71,5 +71,6 @@ var Installment = mongoose.model(
     InstallmentSchema,
     'Installments'
 );
-module.exports = Installment;
+exports.Installment = Installment;
+exports.InstallmentSchema = InstallmentSchema;
 
