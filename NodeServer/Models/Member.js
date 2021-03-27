@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Double = require('@mongoosejs/double');
 var autoIncrement = require('mongoose-auto-increment');
 const validator = require('validator'); 
+
 var MemberSchema = new mongoose.Schema({
 
   memberFirstName: {
@@ -42,7 +43,13 @@ var MemberSchema = new mongoose.Schema({
     type: Number,
     trim: true,
   },
-  
+  password : {
+    type : String
+  },
+  saltSecret : {
+    type : String
+  },
+
   
 
   createdDate: {

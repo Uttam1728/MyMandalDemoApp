@@ -2,10 +2,8 @@ const Member = require("../Models/Member");
 const express = require("express");
 const { isValidObjectId } = require("mongoose");
 
-var router = express.Router();
 
-
-router.get('/', (req, res) => {
+module.exports.getAll =  (req, res) => {
     Member.find(function (err, docs) {
         if (!err) {
             return res.send(docs);
@@ -13,10 +11,10 @@ router.get('/', (req, res) => {
             return res.send(JSON.stringify(err, undefined, 2));
         }
     });
-});
+};
 
 
-router.get('/:id', (req, res) => {
+module.exports.getById =  (req, res) => {
     if (!isValidObjectId(req.params.id)) {
         res.status(400).send("In Valid Object Id");
     }
@@ -32,26 +30,27 @@ router.get('/:id', (req, res) => {
             res.send('Error retriving in data' + JSON.stringify(err, undefined, 2));
         }
     });
-});
+};
 
 
 /*
         Sample Data
-        "memberFirstName" : "test"
-        "memberMiddleName" : "middle"
-        "memberLastName" : "last"
-        "memberImgSrc" : "/img",
-        "memberEmail" : 'test@email.com',
-        "memberMobileNumbers" : ["123456789","465789123"]
-        "memberAddress" : "testAddress",
-        "withdrawal" : "50000"
-        "createdDate"  : Date.now(),
-        "createdBy"  : 13245, 
-        "lastUpdatedDate"  : null,
-        "lastUpdatedBy"  : null,
+        {
+            "memberFirstName" : "test",
+            "memberMiddleName" : "middle",
+            "memberLastName" : "last",
+            "memberImgSrc" : "/img",
+            "memberEmail" : "test@email.com",
+            "memberMobileNumbers" : ["123456789","465789123"],
+            "memberAddress" : "testAddress",
+            "withdrawal" : 50000,
+            "createdBy"  : 13245
+        
+        }
+        
 */
 
-router.post('/', (req, res) => {
+module.exports.AddMember =  (req, res) => {
     var memberFirstName = req.body.memberFirstName;
     var memberMiddleName = req.body.memberMiddleName;
     var memberLastName = req.body.memberLastName;
@@ -77,6 +76,8 @@ router.post('/', (req, res) => {
         memberMobileNumbers: memberMobileNumbers,
         memberAddress: memberAddress,
         withdrawal: withdrawal,
+        // password : "asda",
+        // saltSecret : "4566",
         createdDate: Date.now(),
         createdBy: req.body.createdBy,
         lastUpdatedDate: null,
@@ -91,10 +92,10 @@ router.post('/', (req, res) => {
             return res.send(JSON.stringify(err, undefined, 2));
         }
     });
-});
+};
 
 
-router.put('/:id', (req, res) => {
+module.exports.ChangeDetailsOfMemberById =  (req, res) => {
     if (!isValidObjectId(req.params.id)) {
         res.status(400).send("In Valid Object Id");
     }
@@ -141,9 +142,9 @@ router.put('/:id', (req, res) => {
                 console.log('Error saving data', JSON.stringify(err, undefined, 2));
             }
         });
-});
+};
 
-router.delete('/:id', (req, res) => {
+module.exports.RemoveMemberById = (req, res) => {
     if (!isValidObjectId(req.params.id)) {
         res.status(400).send("In Valid Object Id");
     }
@@ -159,5 +160,5 @@ router.delete('/:id', (req, res) => {
             console.log('Error saving data', JSON.stringify(err, undefined, 2));
         }
     });
-});
-module.exports = router;
+};
+

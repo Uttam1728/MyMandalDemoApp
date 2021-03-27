@@ -1,11 +1,10 @@
-const Installment = require("../Models/Installment");
+const {Installment} = require("../Models/Installment");
 const express = require("express");
 const { isValidObjectId } = require("mongoose");
 
-var router = express.Router();
 
 
-router.get('/', (req, res) => {
+module.exports.getAll = (req, res) => {
     Installment.find(function (err, docs) {
         if (!err) {
             return res.send(docs);
@@ -13,10 +12,10 @@ router.get('/', (req, res) => {
             return res.send(JSON.stringify(err, undefined, 2));
         }
     });
-});
+};
 
 
-router.get('/:id', (req, res) => {
+module.exports.getById =  (req, res) => {
 
     if (!isValidObjectId(req.params.id)) {
         res.status(400).send("In Valid Object Id");
@@ -33,24 +32,28 @@ router.get('/:id', (req, res) => {
             res.send('Error retriving in data' + JSON.stringify(err, undefined, 2));
         }
     });
-});
+};
 
 
 /*
         Sample Data
-        "memberID" : 9,
-        "installment": 500,
-        "oldWithdrawal": 15000,
-        "depositWithdrawal": 10000,
-        "newWithdrawal": 0,
-        "totalWithdrawal": 5000,
-        "isInterestgiven": true,
-        "isInstallmentGiven": false,
-        "intrestOnOldWithdrawal": 250.30,
+        {
+            "memberID" : 9,
+            "installment": 500,
+            "oldWithdrawal": 15000,
+            "depositWithdrawal": 10000,
+            "newWithdrawal": 0,
+            "totalWithdrawal": 5000,
+            "isInterestgiven": true,
+            "isInstallmentGiven": false,
+            "intrestOnOldWithdrawal": 250.30,
+            "createdBy"  : 13245
+        
+        }
 
 */
 
-router.post('/', (req, res) => {
+module.exports.AddInstallment =   (req, res) => {
     var memberID = req.body.memberID;
     var installment = req.body.installment;
     var oldWithdrawal = req.body.oldWithdrawal;
@@ -92,10 +95,10 @@ router.post('/', (req, res) => {
             return res.send(JSON.stringify(err, undefined, 2));
         }
     });
-});
+};
 
 
-router.put('/:id', (req, res) => {
+module.exports.ChangeDetailsOfInstallmentById = (req, res) => {
     if (!isValidObjectId(req.params.id)) {
         res.status(400).send("In Valid Object Id");
     }
@@ -144,9 +147,9 @@ router.put('/:id', (req, res) => {
                 console.log('Error saving data', JSON.stringify(err, undefined, 2));
             }
         });
-});
+};
 
-router.delete('/:id', (req, res) => {
+module.exports.RemoveInstallmentById = (req, res) => {
 
     if (!isValidObjectId(req.params.id)) {
         res.status(400).send("In Valid Object Id");
@@ -163,5 +166,4 @@ router.delete('/:id', (req, res) => {
             console.log('Error saving data', JSON.stringify(err, undefined, 2));
         }
     });
-});
-module.exports = router;
+};

@@ -1,11 +1,11 @@
-const Expence = require("../Models/Expense");
+const {Expence} = require("../Models/Expense");
 const express = require("express");
 const { isValidObjectId } = require("mongoose");
 
-var router = express.Router();
 
 
-router.get('/', (req, res) => {
+
+module.exports.getAll = (req, res,next) => {
 	Expence.find(function (err, docs) {
 		if (!err) {
 			return res.send(docs);
@@ -13,27 +13,27 @@ router.get('/', (req, res) => {
 			return res.send(JSON.stringify(err, undefined, 2));
 		}
 	});
-});
+};
 
 
-router.get('/:id', (req, res) => {
+module.exports.getById = (req, res) => {
 	if (!isValidObjectId(req.params.id)) {
 		res.status(400).send("In Valid Object Id");
 	}
 	// if ObjectId not passed than use findOneAndupdate(filter,options,(err,docs))
 
 	Expence.findById(req.params.id, (err, docs) => {
-		if (!err) {
-			if (docs)
-				res.send(docs);
-			else
-				//send specific status code status - it is remaining
-				res.send('-1');
-		} else {
+		if (!docs) {
+			res.send('Error retriving in data' + JSON.stringify(err, undefined, 2));
+		} 
+		else if(err){
 			res.send('Error retriving in data' + JSON.stringify(err, undefined, 2));
 		}
+		else{
+			res.send(docs);
+		}
 	});
-});
+};
 
 
 /*
@@ -46,7 +46,7 @@ router.get('/:id', (req, res) => {
 	"lastUpdatedBy"  : null,
 */
 
-router.post('/', (req, res) => {
+module.exports.AddExpence = (req, res) => {
 
 	var reason = req.body.reason;
 	var cost = req.body.cost;
@@ -75,10 +75,10 @@ router.post('/', (req, res) => {
 			return res.send(JSON.stringify(err, undefined, 2));
 		}
 	});
-});
+};
 
 
-router.put('/:id', (req, res) => {
+module.exports.ChangeDetailsOfExpenceById =  (req, res) => {
 	if (!isValidObjectId(req.params.id)) {
 		res.status(400).send("In Valid Object Id");
 	}
@@ -113,9 +113,9 @@ router.put('/:id', (req, res) => {
 				console.log('Error saving data', JSON.stringify(err, undefined, 2));
 			}
 		});
-});
+};
 
-router.delete('/:id', (req, res) => {
+module.exports.RemoveExpenceById = (req, res) => {
 	if (!isValidObjectId(req.params.id)) {
 		res.status(400).send("In Valid Object Id");
 	}
@@ -131,5 +131,5 @@ router.delete('/:id', (req, res) => {
 			console.log('Error saving data', JSON.stringify(err, undefined, 2));
 		}
 	});
-});
-module.exports = router;
+};
+

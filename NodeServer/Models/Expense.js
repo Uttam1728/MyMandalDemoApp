@@ -40,5 +40,6 @@ ExpenceSchema.plugin(autoIncrement.plugin, {
   unique: true,
 });
 var Expence = mongoose.model('Expence', ExpenceSchema, 'Expences');
-module.exports = Expence;
+exports.Expence = Expence;
+exports.ExpenceSchema = ExpenceSchema;
 //console.log(mongoose.connection);
