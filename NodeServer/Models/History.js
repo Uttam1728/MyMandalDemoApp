@@ -81,5 +81,6 @@ HistorySchema.plugin(autoIncrement.plugin, {
   unique: true,
 });
 var History = mongoose.model('History', HistorySchema, 'Histories');
-module.exports = History;
+exports.History = History;
+exports.HistorySchema = HistorySchema;
 //console.log(mongoose.connection);

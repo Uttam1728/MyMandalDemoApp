@@ -1,4 +1,4 @@
-const History = require("../Models/History");
+const {History} = require("../Models/History");
 const express = require("express");
 const { isValidObjectId } = require("mongoose");
 

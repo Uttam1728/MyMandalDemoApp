@@ -11,7 +11,7 @@ mongoose.connect(process.env.MONGODB_URI,
     if (!err) {
       console.log("MongoDB coneection SuccsessFul port 27017...");
     } else {
-      console.log("Error In DB Setup" + JSON.stringify(err, undefined, 2))
+      console.log("Error In DB Setup" + JSON.stringify(err, undefined, 2));
     }
   });
   

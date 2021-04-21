@@ -1,0 +1,74 @@
+
+
+
+
+
+
+
+
+<form [formGroup]="LoginForm" (ngSubmit)="onSubmit(LoginForm)">
+  <fieldset>
+    <div id="legend">
+      <legend class="">Register</legend>
+    </div>
+
+
+
+
+
+    <div class="form-group form-row ">
+      <!-- Username -->
+      <label class="col-form-label col-sm-2" for="memberEmail">Email</label>
+      <div class="col-sm-4">
+        <input type="text" formControlName="memberEmail" id="memberEmail" name="memberEmail" placeholder=""
+          class="form-control">
+        <div
+          *ngIf="LoginForm.get('memberEmail').invalid && (LoginForm.get('memberEmail').dirty || LoginForm.get('memberEmail').touched)">
+          <p *ngIf="LoginForm.get('memberEmail').errors.email"> Please provide a true email. </p>
+          <p *ngIf="LoginForm.get('memberEmail').errors.required"> Please provide a email. </p>
+        </div>
+        <!-- <p class="help-block">Username can contain any letters or numbers, without spaces</p> -->
+      </div>
+    </div>
+
+
+
+
+    <div class="form-group form-row ">
+      <!-- Username -->
+      <label class="col-form-label col-sm-2" for="password">password</label>
+      <div class="col-sm-4">
+        <input type="text" formControlName="password" id="password" name="password" placeholder="" class="form-control">
+        <div class="red"
+          *ngIf="LoginForm.get('password').invalid && (LoginForm.get('password').dirty || LoginForm.get('password').touched)">
+          *Please provide a name.
+        </div>
+        <!-- <p class="help-block">Username can contain any letters or numbers, without spaces</p> -->
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+    <div class="form-group form-row">
+      <!-- Button -->
+      <div class="col-sm-4">
+        <button class="btn btn-success" [disabled]="!LoginForm.valid">Register</button>
+      </div>
+    </div>
+  </fieldset>
+</form>
+
+
+
+
+<!-- Error message -->
+<div class="alert" *ngIf="serverErrorMessages">
+  {{serverErrorMessages}}
+</div>
