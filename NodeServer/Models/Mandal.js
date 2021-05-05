@@ -3,7 +3,7 @@ const Double = require('@mongoosejs/double');
 var autoIncrement = require('mongoose-auto-increment');
 const validator = require('validator');
 const {HistorySchema} = require("./History");
-const {MemberSchema} = require("./Member");
+
 
 var MandalSchema = new mongoose.Schema({
 
@@ -36,8 +36,7 @@ var MandalSchema = new mongoose.Schema({
         required: true,
     },
     history : { type : [HistorySchema] },
-    mandalAdmins : { type : [MemberSchema] },
-    mandalMembers: { type : [MemberSchema] },
+
     createdDate: {
         type: Date,
         required: [true, 'not proper request']

@@ -1,6 +1,72 @@
-<div class="wrapper">
-    <div id="formContent">
-      <h2 class="underlineHover"  routerLink="/login"  routerLinkActive="active"> Sign In </h2>
-      <router-outlet></router-outlet>
+<nz-layout class="app-layout">
+  <nz-sider class="menu-sidebar"
+            nzCollapsible
+            nzBreakpoint="md"
+            [(nzCollapsed)]="isCollapsed">
+    <div class="sidebar-logo">
+      <a href="/welcome">
+        <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo">
+        <h1>Ant Design Of Angular</h1>
+      </a>
     </div>
-  </div>
+    <ul nz-menu nzTheme="dark" nzMode="inline" >
+      <li nz-submenu nzOpen nzTitle="Dashboard" nzIcon="dashboard">
+        <ul>
+          <li nz-menu-item nzMatchRouter>
+            <a>Welcome</a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a>Monitor</a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a>Workplace</a>
+          </li>
+        </ul>
+      </li>
+      <li nz-submenu nzTitle="Members" nzIcon="user">
+        <ul>
+          <li nz-menu-item>
+            <i nz-icon nzType="user-add" nzTheme="outline"></i>
+            <a routerLink="/member/add">Add Member</a>
+          </li>
+          <li nz-menu-item>
+            <i nz-icon nzType="search" nzTheme="outline"></i>
+            <a routerLink="/member/search">Search Member</a>
+          </li>
+          <li nz-menu-item>
+            <a routerLink="/member/add">Add Member to Mandal</a>
+          </li>
+          <li nz-menu-item>
+            <a routerLink="/member/add">Add MemberAdmin to Mandal</a>
+          </li>
+        </ul>
+      </li>
+      <li nz-submenu nzTitle="Mandals" nzIcon="apartment">
+        <ul>
+          <li nz-menu-item>
+            <i nz-icon nzType="plus" nzTheme="outline"></i>
+            <a routerLink="/mandal/add">Add Mundal</a>
+          </li>
+          <li nz-menu-item>
+            <i nz-icon nzType="search" nzTheme="outline"></i>
+            <a routerLink="/mandal/search">Search Mandal</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </nz-sider>
+  <nz-layout>
+    <nz-header>
+      <div class="app-header">
+        <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
+          <i class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></i>
+        </span>
+      </div>
+    </nz-header>
+    <nz-content>
+      <div class="inner-content">
+        <router-outlet></router-outlet>
+      </div>
+    </nz-content>
+  </nz-layout>
+</nz-layout>

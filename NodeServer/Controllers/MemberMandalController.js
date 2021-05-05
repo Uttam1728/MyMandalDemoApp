@@ -9,7 +9,7 @@ const { MemberMandal } = require("../Models/MemberMandal");
 
 
 module.exports.getAll = (req, res) => {
-  Member.find(function (err, docs) {
+  MemberMandal.find(function (err, docs) {
     if (!err) {
       return res.send(docs);
     } else {
@@ -24,7 +24,7 @@ module.exports.getById = (req, res) => {
     res.status(400).send("In Valid Object Id");
   }
   // if ObjectId not passed than use findOneAndupdate(filter,options,(err,docs))
-  Member.findById(req.params.id, (err, docs) => {
+  MemberMandal.findById(req.params.id, (err, docs) => {
     if (!err) {
       if (docs)
         res.send(docs);
@@ -55,21 +55,14 @@ module.exports.getById = (req, res) => {
 
 */
 
-module.exports.AddMember = (req, res, next) => {
-  console.log('in add ADD Member', JSON.parse(req.body.member), req.file.filename);
-  tempMemberObj = JSON.parse(req.body.member);
-  var memberFirstName = tempMemberObj.memberFirstName;
-  var memberMiddleName = tempMemberObj.memberMiddleName;
-  var memberLastName = tempMemberObj.memberLastName;
-  var memberImgSrc = 'http://localhost:3000/images/' + req.file.filename;
-  var memberEmail = tempMemberObj.memberEmail;
-  var memberMobileNumbers = tempMemberObj.memberMobileNumbers;
-  var memberAddress = tempMemberObj.memberAddress;
-  var withdrawal = tempMemberObj.withdrawal;
-  var mandals = tempMemberObj.mandals;
-  var password = tempMemberObj.password;
+module.exports.AddMemberMandal = (req, res, next) => {
+  console.log('in add ADD Member Mandal');
+
+  var memberId = req.body.memberId;
+  var mandalId = req.body.mandalId;
+  var isAdmin = req.body.isAdmin
   var createdDate = Date.now();
-  var createdBy = tempMemberObj.createdBy;
+  var createdBy = req.body.createdBy;
   var lastUpdatedDate = null;
   var lastUpdatedBy = null;
 
@@ -79,17 +72,10 @@ module.exports.AddMember = (req, res, next) => {
 
   // ------------------- Business logic section End --------------------- //
 
-  console.log(member);
-  var member = new Member({
-    memberFirstName: memberFirstName,
-    memberMiddleName: memberMiddleName,
-    memberLastName: memberLastName,
-    memberImgSrc: memberImgSrc,
-    memberEmail: memberEmail,
-    memberMobileNumbers: memberMobileNumbers,
-    memberAddress: memberAddress,
-    withdrawal: withdrawal,
-    password: password,
+  var memberMandal = new MemberMandal({
+    memberId : mongoose.mongo.ObjectId(memberId),
+    mandalId : mongoose.mongo.ObjectId(mandalId),
+    isAdmin : isAdmin,
     // saltSecret : "4566",
     createdDate: createdDate,
     createdBy: createdBy,
@@ -97,28 +83,15 @@ module.exports.AddMember = (req, res, next) => {
     lastUpdatedBy: lastUpdatedBy,
   });
 
-  member.save((err, docs) => {
+  memberMandal.save((err, docs) => {
     if (!err) {
       console.log(docs);
-        mandals.forEach(mandalId => {
-          var memberMandal = new MemberMandal({
-            memberId : docs._id,
-            mandalId : mongoose.mongo.ObjectId(mandalId),
-            isAdmin : 0,
-            // saltSecret : "4566",
-            createdDate: docs.createdDate,
-            createdBy: docs.createdBy,
-            lastUpdatedDate: docs.lastUpdatedDate,
-            lastUpdatedBy: docs.lastUpdatedBy,
-          });
-          memberMandal.save((err, docs) => {
-          });
-        });-2-9
+
       return res.send(docs);
     }
     else {
       if (err.code == 11000)
-        res.status(422).send(['Duplicate email adrress found.']);
+        res.status(422).send(['Duplicate found.']);
       else
         return next(err);
     }
@@ -126,18 +99,14 @@ module.exports.AddMember = (req, res, next) => {
 };
 
 
-module.exports.ChangeDetailsOfMemberById = (req, res) => {
+
+module.exports.ChangeDetailsOfMemberMandalById = (req, res) => {
   if (!isValidObjectId(req.params.id)) {
     res.status(400).send("In Valid Object Id");
   }
-  var memberFirstName = req.body.memberFirstName;
-  var memberMiddleName = req.body.memberMiddleName;
-  var memberLastName = req.body.memberLastName;
-  var memberImgSrc = req.body.memberImgSrc;
-  var memberEmail = req.body.memberEmail;
-  var memberMobileNumbers = req.body.memberMobileNumbers;
-  var memberAddress = req.body.memberAddress;
-  var withdrawal = req.body.withdrawal;
+  var memberId = req.body.memberId;
+  var mandalId = req.body.mandalId;
+  var isAdmin = req.body.isAdmin
 
   // ------------------- Business logic section Start ------------------- //
 
@@ -146,21 +115,16 @@ module.exports.ChangeDetailsOfMemberById = (req, res) => {
   // ------------------- Business logic section End --------------------- //
 
 
-  var member = {
-    memberFirstName: memberFirstName,
-    memberMiddleName: memberMiddleName,
-    memberLastName: memberLastName,
-    memberMobileNumbers: memberMobileNumbers,
-    memberAddress: memberAddress,
-    withdrawal: withdrawal,
-    memberImgSrc: memberImgSrc,
-    memberEmail: memberEmail,
+  var memberMandal = {
+    memberId : memberId,
+    mandalId : mandalId,
+    isAdmin : isAdmin,
     lastUpdatedDate: Date.now(),
     lastUpdatedBy: req.body.createdBy,
   };
   // if ObjectId not passed than use findOneAndupdate(filter,options,(err,docs))
-  Member.findByIdAndUpdate(req.params.id,
-    member,
+  MemberMandal.findByIdAndUpdate(req.params.id,
+    memberMandal,
     { new: true },
     (err, docs) => {
       if (!err) {
@@ -175,18 +139,14 @@ module.exports.ChangeDetailsOfMemberById = (req, res) => {
     });
 };
 
-module.exports.RemoveMemberById = (req, res) => {
+module.exports.RemoveMemberMandalById = (req, res) => {
   if (!isValidObjectId(req.params.id)) {
     res.status(400).send("In Valid Object Id");
   }
   // if ObjectId not passed than use findOneAndRemove(filter,(err),docs)
-  Member.findByIdAndDelete(req.params.id, (err, docs) => {
+  MemberMandal.findByIdAndDelete(req.params.id, (err, docs) => {
     if (!err) {
       if (docs) {
-
-        MemberMandal.deleteMany({ memberId: docs._id }, function(err) {
-          console.log(err);
-        });
         res.send(docs);
       }
       else
@@ -196,37 +156,6 @@ module.exports.RemoveMemberById = (req, res) => {
       res.status(400).send(['Error saving data', JSON.stringify(err, undefined, 2)]);
     }
   });
-};
-
-
-module.exports.authenticateUser = (req, res, next) => {
-  // call for passport authentication
-  passport.authenticate('addmember', (err, user, info) => {
-    // error from passport middleware
-    if (err) {
-      return res.status(400).json(err);
-    }
-    // registered user
-    else if (user) {
-      return res.status(200).json({ "token": user.generateJwt() });
-    }
-    // unknown user or wrong password
-    else {
-      return res.status(404).json(info);
-    }
-  })(req, res);
-};
-
-module.exports.MemberHome = (req, res, next) => {
-  console.log(' in member home')
-  Member.findOne({ _id: req._id },
-    (err, user) => {
-      if (!user)
-        return res.status(404).json({ status: false, message: 'User record not found.' });
-      else
-        return res.status(200).json({ status: true, user: _.pick(user, ['fullName', 'email']) });
-    }
-  );
 };
 
 

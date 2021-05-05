@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserService } from '../shared/services/user.service';
+import { UserService } from '../../shared/services/user.service';
 
 @Component({
   selector: 'app-member-home',
@@ -16,9 +16,9 @@ export class MemberHomeComponent implements OnInit {
       res => {
         this.userDetails = res['user'];
       },
-      err => { 
+      err => {
         console.log(err);
-        
+
       }
     );
   }

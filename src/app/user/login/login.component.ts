@@ -12,18 +12,17 @@ export class LoginComponent implements OnInit {
   LoginForm: FormGroup;
 
   constructor(private userService: UserService,
-              private router : Router, 
+              private router : Router,
               private fb: FormBuilder,
-              ) 
+              )
     { }
 
   model ={
     email :'',
     password:''
   };
-  emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   serverErrorMessages: string;
-  
+
   ngOnInit() {
     if(this.userService.isLoggedIn())
     this.router.navigateByUrl('/userprofile');
@@ -34,7 +33,7 @@ export class LoginComponent implements OnInit {
       });
   }
 
-  
+
   onSubmit(form: FormGroup) {
     // let tempstr = '';
     // tempstr += 'Valid?'+ form.valid + '\n'; // true or false
@@ -43,18 +42,22 @@ export class LoginComponent implements OnInit {
     // tempstr += 'Message'+ form.value.memberAddress + '\n';
     // alert(tempstr);
     if(form.valid){
-      
+
       this.userService.login(form.value).subscribe(
         res => {
           this.userService.setToken(res['token']);
-          this.router.navigateByUrl('/userprofile');
+          this.router.navigateByUrl('/member/home');
         },
         err => {
           this.serverErrorMessages = err.error.message;
+          this.resetForm(form);
         }
       );
     }
   }
 
+  resetForm(form: FormGroup){
+    form.reset()
 
+  }
 }

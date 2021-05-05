@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
 const Double = require('@mongoosejs/double');
 var autoIncrement = require('mongoose-auto-increment');
-const validator = require('validator'); 
+const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+
 
 var MemberSchema = new mongoose.Schema({
 
@@ -11,7 +12,7 @@ var MemberSchema = new mongoose.Schema({
     type: String,
     required: [true, 'આપનું નામ દાખલ કરો'],
     trim: true,
-  }, 
+  },
   memberMiddleName: {
     type: String,
     required: [true, 'નામ દાખલ કરો'],
@@ -55,9 +56,6 @@ var MemberSchema = new mongoose.Schema({
   saltSecret : {
     type : String
   },
-  mandals:[
-    {type: mongoose.Schema.Types.ObjectId, ref: 'Mandal'}
-  ],
   createdDate: {
     type: Date,
     required: [true, 'not proper request']
@@ -95,9 +93,10 @@ MemberSchema.pre('save', function (next) {
   });
 });
 
+
 // Methods
 MemberSchema.methods.verifyPassword = function (password) {
-  console.log('In model');
+  console.log('In verifyPassword');
   return bcrypt.compareSync(password, this.password);
 };
 
@@ -113,4 +112,3 @@ var Member = mongoose.model('Member', MemberSchema, 'Members');
 exports.Member = Member;
 exports.MemberSchema = MemberSchema;
 //console.log(mongoose.connection);
- 

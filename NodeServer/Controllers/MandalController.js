@@ -1,6 +1,8 @@
 const express = require("express");
 const { isValidObjectId } = require("mongoose");
 const Mandal = require('../Models/Mandal');
+const { IfNullOrEmptyOrBlankThan } = require('../utils/strings');
+const { MemberMandal } = require("../Models/MemberMandal");
 
 
 module.exports.getAll = (req, res, next) => {
@@ -55,20 +57,18 @@ module.exports.getById = (req, res) => {
     "lastUpdatedBy"  : null,
 */
 
-module.exports.AddMandal = (req, res) => {
-    console.log('in add', req.body);
-
-    var mandalName = req.body.mandalName;
-    var mandalLogosrc = req.body.mandalLogosrc;
-    var installmentValue = req.body.nstallmentValue;
-    var totalWithdrawal = req.body.totalWithdrawal;
-    var totalBalence = req.body.totalBalence;
-    var intrestRate = req.body.intrestRate;
-    var history = req.body.history;
-    var mandalAdmins = req.body.mandalAdmins;
-    var mandalMembers = req.body.mandalMembers;
+module.exports.AddMandal = (req, res, next) => {
+    console.log('in add ADD MANDAL', JSON.parse(req.body.mandal), req.file.filename);
+    tempMandalObj = JSON.parse(req.body.mandal);
+    var mandalName = tempMandalObj.mandalName;
+    var mandalLogosrc = 'http://localhost:3000/images/' + req.file.filename;
+    var installmentValue = tempMandalObj.installmentValue;
+    var totalWithdrawal = tempMandalObj.totalWithdrawal;
+    var totalBalence = tempMandalObj.totalBalence;
+    var intrestRate = tempMandalObj.intrestRate;
+    var history = tempMandalObj.history;
     var createdDate = Date.now();
-    var createdBy = req.body.createdBy;
+    var createdBy = tempMandalObj.createdBy;
     var lastUpdatedDate = null;
     var lastUpdatedBy = null;
 
@@ -78,7 +78,6 @@ module.exports.AddMandal = (req, res) => {
 
     // ------------------- Business logic section End --------------------- //
 
-    console.log('in add');
     var mandal = new Mandal({
         mandalName: mandalName,
         mandalLogosrc: mandalLogosrc,
@@ -87,22 +86,21 @@ module.exports.AddMandal = (req, res) => {
         totalBalence: totalBalence,
         intrestRate: intrestRate,
         history: history,
-        mandalAdmins: mandalAdmins,
-        mandalMembers: mandalMembers,
         createdDate: createdDate,
         createdBy: createdBy,
         lastUpdatedDate: lastUpdatedDate,
         lastUpdatedBy: lastUpdatedBy,
     });
-    console.log('in add', Mandal);
+    console.log('in add', mandal);
     mandal.save((err, docs) => {
         if (!err) {
             //console.log(docs);
             return res.send(docs);
         } else {
-            if (err.code == 11000)
-                res.status(422).send(['Duplicate email adrress found.']);
-            else
+            // if (err.code == 11000)
+            //     res.status(422).send(JSON.stringify(err, undefined, 2));
+            // else
+            console.log('in err',err);
                 return next(err);
         }
     });
@@ -120,8 +118,6 @@ module.exports.ChangeDetailsOfMandalById = (req, res) => {
     var totalBalence = req.body.totalBalence;
     var intrestRate = req.body.intrestRate;
     var history = req.body.history;
-    var mandalAdmins = req.body.mandalAdmins;
-    var mandalMembers = req.body.mandalMembers;
     var lastUpdatedDate = Date.now();
     var lastUpdatedBy = req.body.createdBy;
 
@@ -139,8 +135,6 @@ module.exports.ChangeDetailsOfMandalById = (req, res) => {
         totalBalence: totalBalence,
         intrestRate: intrestRate,
         history: history,
-        mandalAdmins: mandalAdmins,
-        mandalMembers: mandalMembers,
         lastUpdatedDate: lastUpdatedDate,
         lastUpdatedBy: lastUpdatedBy,
     };
@@ -170,8 +164,12 @@ module.exports.RemoveMandalById = (req, res) => {
     // if ObjectId not passed than use findOneAndRemove(filter,(err),docs)
     Mandal.findByIdAndDelete(req.params.id, (err, docs) => {
         if (!err) {
-            if (docs)
-                res.send(docs);
+            if (docs){
+              MemberMandal.deleteMany({ mandalId: docs._id }, function(err) {
+                console.log(err);
+              });
+                  res.send(docs);
+            }
             else
                 //send specific status code status - it is remaining
                 res.send('-1');
@@ -191,6 +189,36 @@ module.exports.getAllMandalName = (req, res) => {
             if (!docs) {
                 return res.send(-21);
             }
+            return res.send(JSON.stringify(err, undefined, 2));
+        }
+    });
+};
+
+
+module.exports.SearchMandal = (req, res) => {
+    var searchparam = JSON.parse(req.query.searchparam);
+    console.log(searchparam)
+    var isPresentdate = IfNullOrEmptyOrBlankThan(searchparam.fromdate,null);
+    var isPresentName = IfNullOrEmptyOrBlankThan(searchparam.mandalname,null);
+    var searchObj = {};
+    if(isPresentName){
+        searchObj.mandalName = { $regex: '.*' + searchparam.mandalname + '.*',
+            $options: 'i'
+        };
+    }
+    if(isPresentdate){
+        searchObj.createdDate = { $gte: searchparam.fromdate,
+            $lte: searchparam.todate
+        };
+    }
+    console.log(searchObj)
+    var query = Mandal.find(searchObj).limit(100);
+    query.exec(function (err, docs) {
+        if (!err) {
+
+            return res.send(docs);
+        } else {
+
             return res.send(JSON.stringify(err, undefined, 2));
         }
     });
